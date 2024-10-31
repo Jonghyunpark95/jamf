@@ -10,10 +10,13 @@ ip_address=$(ifconfig en0 | awk '/inet / {print $2}')
 hostname=$(hostname)
 
 # 시리얼 번호 가져오기
-serial_number=$(system_profiler SPHardwareDataType | awk '/Serial Number (system)/ {print $4}')
+serial_number=$(system_profiler SPHardwareDataType | awk '/Serial Number \(system\):/ {print $NF}')
+
+# 기타 정보 가져오기
+system_profiler SPHardwareDataType=$(system_profiler SPHardwareDataType)
 
 # 메시지 내용 생성
-message="MAC 주소: $mac_address\nIP 주소: $ip_address\n호스트 이름: $hostname\n시리얼 번호: $serial_number"
+message="MAC 주소: $mac_address\nIP 주소: $ip_address\n호스트 이름: $hostname\n시리얼 번호: $serial_number\n기타정보: $system_profiler SPHardwareDataType"
 
 # 메시지 창에 정보 표시
 osascript -e "display dialog \"$message\" with title \"맥북 정보\""
